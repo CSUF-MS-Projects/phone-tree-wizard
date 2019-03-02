@@ -1,6 +1,16 @@
+import os
 from twilio.rest import Client
 from twilio.twiml.voice_response import Dial, VoiceResponse, Say
 
+
+
+TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')
+TWILIO_API = os.environ.get('TWILIO_API')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+TWIML_INSTRUCTIONS_URL = "https://2cf79e46.ngrok.io/parseURL"
+
+
+client = Client(TWILIO_API, TWILIO_AUTH_TOKEN)
 
 class OutboundCall(object):
     def dial(self, company):
@@ -19,9 +29,6 @@ class Twilio(OutboundCall):
             from_=TWILIO_PHONE_NUMBER,
             url=TWIML_INSTRUCTIONS_URL
         )
-
-    # def dial(self, company):
-    #     print("Dialing with Twilio  " + company.phoneNum)
 
 class GoogleVoice(OutboundCall):
     def __init__(self):
