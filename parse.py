@@ -1,75 +1,109 @@
-# Import Libraries
+import nltk
+from nltk import pos_tag
+from nltk.tokenize import word_tokenize
+# nltk.download('averaged_perceptron_tagger')
+#from nltk.corpus import state_union
+from nltk.tokenize import PunktSentenceTokenizer
+
+sample_text = "Thank you for calling walmart.com for Walmart and Sam's Club store locations questions about our source savings catcher program or the Walmart credit card, press 1 to track a walmart.com order, press 2 for all other walmart.com related questions, press 3. To hear this message again, press star."
+
+custom_sent_tokenizer = PunktSentenceTokenizer(sample_text)
+
+tokenized = custom_sent_tokenizer.tokenize(sample_text)
 
 
-# Store parsed speech and break it apart
-def storeSpeech(parsedSpeech):
-    # break parsed speech based on its numerical option
-    storage = []
-    phrases = [
-        'Press',
-        'Select',
-        'press',
-        'select',
-        '.'
-    ]
-    introPhrases = [
+"""
+function: assign each word to parts of speech
+"""
+def convert_pos(raw_text):
+    my_list = []
+    for word in raw_text.split():
+        my_list.append(word)
+    tagged = nltk.pos_tag(my_list)
+    # convert list of tuples to list of lists
+    list_of_lists = [list(elem) for elem in tagged]
+
+    return list_of_lists
+
+# a = [[1, 3, 4], [2, 4, 4], [3, 4, 5]]
+# print(a)
+# for list in a:
+#     for number in list:
+#         #print(number)
+#         if number == 5:
+#             print(number)
+
+t = convert_pos(sample_text)
+introPhrases = [
         'For',
         'To reach',
     ]
-    """
-    Iterate through every word in parsedSpeech
-    1) remove commas
-    2) tokenize based on identifying key phrases 
-    2) remove list entries that do not have digits
-    """
+# 1) find index to introduction's beginning
+def introIndex(text_list):
+    storage = []
+    for i in range(len(text_list)):
+        for word in text_list[i]:
+            if (word == 'for') and (text_list[i+1][1] == 'NNP'):
+                print("found!")
+                storage.append(word)
+                return i
+                break
 
-    # 1) cut out introduction
-    for word in parsedSpeech.split():
-        if word in introPhrases:
-            storage.append(word)
-
-    # 2) tokenize based on identifying key phrases
-    for word in parsedSpeech.split():
-        # # iterate through the word's characters to locate punctuation
-        # if (word.find('.'))!=-1:
-        #     storage = parsedSpeech.split('.')
-        # iterate through the word to check if it is in the phrase list
-        if word in phrases:
-            storage = parsedSpeech.split(word)
-            print("found special word")
-            print(storage)
-
-    # 3)  remove list entries that do not have digits
-    storage2 = []
-    for i in range(len(storage)-1):
-        if (any(char.isdigit() for char in storage[i]))==True:
-            print("found digit")
+#  2) remove introduction
+def removeIntro(startIndex, text_list):
+    start = startIndex
+    for i in range(len(text_list)):
+        if text_list[i][1] == 'CD':
+            print("index is: ")
             print(i)
-            storage2.append(storage[i])
-            print(storage2)
+            end = i
+            break
+    indices = []
+    for i in range(start, end):
+        print(i)
+        indices.append(i)
+    l = " ".join([text_list[i][0] for i in indices])
+    return l
 
-    # 4) tokenize
+#  3)  find all other indices with digits
+def findDigits(text_list):
+    digitIndices = []
+    for i in range(len(text_list)):
+        if text_list[i][1] == 'CD':
+            digitIndices.append(text_list[i][0])
+    return digitIndices
 
+i = introIndex(t)
+print(i)
+new_list = removeIntro(i, t)
+print(new_list)
+print("digit indices: ")
+di = findDigits(t)
+print(di)
 
+#  4)  Create new list with:  [selection, number]
+store = []
+for i in range(len(di)):
+    store.append()
 
-
-
-    return storage2
-
-# store into list
-# [
-#   (ID, option number, function description),
-#   (ID, option number, function description),
-#   ...
-#  ]
-
-
-
-def main():
-    #test = "For Accounting, press 1. For Parks, press 2.  For Billing, press 3."
-    #test = "Thank you for calling The Operations Tech Company, where Technology and business come together. If you know your party's extension, you may dial it at any time. Otherwise, choose from one of the following options. For Customer Service, press 1. For Technical Support, press 2. For our regular business hours, press 3. For accounting, press 4. For Purchasing, press 5. To find a location near you, press 6. Otherwise, press 0 for the receptionist or stay on the line and somebody will assist you shortly."
-    test = "Thank you for calling walmart.com for Walmart and Sam's Club store locations questions about our source savings catcher program or the Walmart credit card, press 1 to track a walmart.com order, press 2 for all other walmart.com related questions, press 3. To hear this message again, press star."
-    t = storeSpeech(test)
-    print(t)
-
-main()
+# def parse_sentence():
+#     storage = []
+#     try:
+#         for i in tokenized:
+#             words = nltk.word_tokenize(i)
+#             print("WORD IS: ")
+#             print(words)
+#             tagged = nltk.pos_tag(words)
+#             print(tagged)
+#             storage.append(tagged)
+#
+#     except Exception as e:
+#         print(str(e))
+#         print("EXCEPTION")
+#     return storage
+#
+# t = parse_sentence()
+# print(type(t))
+# print(t)
+#
+#
