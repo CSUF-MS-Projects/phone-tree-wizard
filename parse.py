@@ -2,7 +2,6 @@ import nltk
 from nltk import pos_tag
 from nltk.tokenize import word_tokenize
 # nltk.download('averaged_perceptron_tagger')
-#from nltk.corpus import state_union
 from nltk.tokenize import PunktSentenceTokenizer
 
 sample_text = "Thank you for calling walmart.com for Walmart and Sam's Club store locations questions about our source savings catcher program or the Walmart credit card, press 1 to track a walmart.com order, press 2 for all other walmart.com related questions, press 3. To hear this message again, press star."
@@ -56,35 +55,67 @@ def removeIntro(startIndex, text_list):
         if text_list[i][1] == 'CD':
             print("index is: ")
             print(i)
-            end = i
+            end = i # i = where the first cardinal digit is found
             break
     indices = []
-    for i in range(start, end):
-        print(i)
+    for i in range(start, end): # store first entry into l (after removing intro)
         indices.append(i)
     l = " ".join([text_list[i][0] for i in indices])
     return l
 
-#  3)  find all other indices with digits
+#  3)  find all other indices with digits --> return a list of indices where cardinal digits are found
 def findDigits(text_list):
-    digitIndices = []
+    digitIndices_list = []
     for i in range(len(text_list)):
         if text_list[i][1] == 'CD':
-            digitIndices.append(text_list[i][0])
-    return digitIndices
+            #digitIndices.append(text_list[i][0])
+            digitIndices_list.append(i)
+    return digitIndices_list
+
+#  4)  Create new dictionary with:
+"""
+level_selection = 
+1_1 = { 
+    1 :"source savings catcher program or the Walmart credit card",
+    2: "to track a walmart.com order",
+    3: "for all other walmart.com related questions"
+    }
+"""
+def storeInDictionary(listOfDigits):
+    d = {}
+    i = 1
+    d[i] = first_entry
+    i+=1
+    length = len(listOfDigits)
+    print(length)
+    for i in range(len(listOfDigits)):
+        if i < len(listOfDigits)-1:
+            start = listOfDigits[i] + 1 #26
+            end = listOfDigits[i+1] # 32 + 32 - 25 = 39
+            print("show start // end")
+            print(start)
+            print(end)
+            indices = []
+            for i2 in range(start, end):
+                indices.append(i2)
+            l = " ".join([t[i2][0] for i2 in indices])
+            d[i+2] = l
+    return d
+
 
 i = introIndex(t)
 print(i)
-new_list = removeIntro(i, t)
-print(new_list)
+first_entry = removeIntro(i, t)
+print(type(first_entry))
+print(first_entry)
 print("digit indices: ")
 di = findDigits(t)
 print(di)
+print("stored dictionary is: ")
+print("TEST")
+dict_ = storeInDictionary(di)
+print(dict_)
 
-#  4)  Create new list with:  [selection, number]
-store = []
-for i in range(len(di)):
-    store.append()
 
 # def parse_sentence():
 #     storage = []
