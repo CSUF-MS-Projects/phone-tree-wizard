@@ -32,23 +32,26 @@ def convert_pos(raw_text):
 #         if number == 5:
 #             print(number)
 
-t = convert_pos(sample_text)
+
 introPhrases = [
         'For',
-        'To reach',
+        'for',
+        'reach',
+        'Reach',
     ]
 # 1) find index to introduction's beginning
 def introIndex(text_list):
     storage = []
     for i in range(len(text_list)):
         for word in text_list[i]:
-            if (word == 'for') and (text_list[i+1][1] == 'NNP'):
+            if (word in introPhrases) and (text_list[i + 1][1] == 'NNP'):
+            #if (word == 'for') and (text_list[i+1][1] == 'NNP'):
                 print("found!")
                 storage.append(word)
                 return i
                 break
 
-#  2) remove introduction
+#  2) remove introduction --> returns string of the first entry without intro
 def removeIntro(startIndex, text_list):
     start = startIndex
     for i in range(len(text_list)):
@@ -81,10 +84,10 @@ level_selection =
     3: "for all other walmart.com related questions"
     }
 """
-def storeInDictionary(listOfDigits):
+def storeInDictionary(listOfDigits, firstEntry, t):
     d = {}
     i = 1
-    d[i] = first_entry
+    d[i] = firstEntry
     i+=1
     length = len(listOfDigits)
     print(length)
@@ -102,39 +105,55 @@ def storeInDictionary(listOfDigits):
             d[i+2] = l
     return d
 
+# def storeInDictionary(listOfDigits):
+#     d = {}
+#     i = 1
+#     d[i] = first_entry
+#     i+=1
+#     length = len(listOfDigits)
+#     print(length)
+#     for i in range(len(listOfDigits)):
+#         if i < len(listOfDigits)-1:
+#             start = listOfDigits[i] + 1 #26
+#             end = listOfDigits[i+1] # 32 + 32 - 25 = 39
+#             print("show start // end")
+#             print(start)
+#             print(end)
+#             indices = []
+#             for i2 in range(start, end):
+#                 indices.append(i2)
+#             l = " ".join([t[i2][0] for i2 in indices])
+#             d[i+2] = l
+#     return d
 
-i = introIndex(t)
-print(i)
-first_entry = removeIntro(i, t)
-print(type(first_entry))
-print(first_entry)
-print("digit indices: ")
-di = findDigits(t)
-print(di)
-print("stored dictionary is: ")
-print("TEST")
-dict_ = storeInDictionary(di)
-print(dict_)
+# t = convert_pos(sample_text)
+# i = introIndex(t)
+# print(i)
+# first_entry = removeIntro(i, t)
+# print(type(first_entry))
+# print(first_entry)
+# print("digit indices: ")
+# di = findDigits(t)
+# print(di)
+# print("stored dictionary is: ")
+# print("TEST")
+# dict_ = storeInDictionary(di)
+# print(dict_)
 
 
-# def parse_sentence():
-#     storage = []
-#     try:
-#         for i in tokenized:
-#             words = nltk.word_tokenize(i)
-#             print("WORD IS: ")
-#             print(words)
-#             tagged = nltk.pos_tag(words)
-#             print(tagged)
-#             storage.append(tagged)
-#
-#     except Exception as e:
-#         print(str(e))
-#         print("EXCEPTION")
-#     return storage
-#
-# t = parse_sentence()
-# print(type(t))
-# print(t)
-#
-#
+def parseText(text):
+    t = convert_pos(text)
+    i = introIndex(t)
+    print(i)
+    first_entry = removeIntro(i, t)
+
+    print("digit indices: ")
+    di = findDigits(t)
+    print(di)
+    print("stored dictionary is: ")
+    print("TEST")
+    dict_ = storeInDictionary(di, first_entry, t)
+    print(dict_)
+    return dict_
+
+d = parseText(sample_text)
