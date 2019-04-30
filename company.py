@@ -1,12 +1,12 @@
 import outboundCall
-import parseSpeech
+import parse
 
 class Company(object):
     def __init__(self, phoneNum=None, companyName=None):
         self.phoneNum = phoneNum
         self.companyName = companyName
         self.outbound_method = outboundCall.OutboundCall()
-        self.parse_method = parseSpeech.ParseSpeech()
+        self.parse_method = parse.ParseText()
 
     def display(self):
         pass
@@ -14,8 +14,8 @@ class Company(object):
     def dial(self, company):
         self.outbound_method.dial(company)
 
-    def parse(self, company):
-        self.parse_method.parse(company)
+    def parse(self, company, text):
+        self.parse_method.parse(company, text)
 
 
 class RegularCompany(Company):
