@@ -1,13 +1,13 @@
 import os
 from twilio.rest import Client
-from twilio.twiml.voice_response import Dial, VoiceResponse, Say
+from twilio.twiml.voice_response import Dial, VoiceResponse, Say, Gather
 
 
 
 TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')
 TWILIO_API = os.environ.get('TWILIO_API')
 TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
-TWIML_INSTRUCTIONS_URL = "https://2cf79e46.ngrok.io/parseURL"
+TWIML_INSTRUCTIONS_URL = "https://2cf79e46.ngrok.io/parsing"
 
 
 client = Client(TWILIO_API, TWILIO_AUTH_TOKEN)

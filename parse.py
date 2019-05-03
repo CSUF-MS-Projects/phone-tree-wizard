@@ -8,15 +8,17 @@ from nltk.tokenize import PunktSentenceTokenizer
 
 
 class ParseText(object):
-    def parse(self, company):
-        pass
+    def parse(self, company, parsedSpeech):
+        #pass
+        return self.dict_
 
 class parse_PS(ParseText):
     def __init__(self):
         super(parse_PS, self).__init__()
-
+        self.dict_ = {}
 
     def parse(self, company, parsedSpeech):
+        self.dict_ = {}
         introPhrases = [
             'For',
             'for',
@@ -72,7 +74,6 @@ class parse_PS(ParseText):
             d[i] = firstEntry
             i += 1
             length = len(listOfDigits)
-            print(length)
             for i in range(len(listOfDigits)):
                 if i < len(listOfDigits) - 1:
                     start = listOfDigits[i] + 1
@@ -92,6 +93,6 @@ class parse_PS(ParseText):
             dict_ = storeInDictionary(di, first_entry, t)
             return dict_
 
-        d = parseText(parsedSpeech)
-        print(d)
-        return d
+
+        self.dict_ = parseText(parsedSpeech)
+        return self.dict_
